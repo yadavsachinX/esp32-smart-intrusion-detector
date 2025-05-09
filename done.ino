@@ -12,13 +12,13 @@
 char ssid[] = "realme GT 6";
 char pass[] = "11221122";
 
-// Pin Definitions
+// Pin Definition
 #define PIR_PIN 13
 #define REED_SWITCH_PIN 12
 #define RED_LED 14
 #define BUZZER_PIN 4
 
-// Camera Pin Configuration
+// Camera Pin Config
 #define PWDN_GPIO_NUM     32
 #define RESET_GPIO_NUM    -1
 #define XCLK_GPIO_NUM     0
@@ -49,7 +49,7 @@ void printBoth(String msg) {
   terminal.flush();
 }
 
-// === BLYNK CONTROL ===
+// BLYNK CONTROL
 
 BLYNK_WRITE(V1) {
   int val = param.asInt();
@@ -71,8 +71,6 @@ BLYNK_WRITE(V5) {
   }
 }
 
-// === SETUP ===
-
 void setup() {
   Serial.begin(115200);
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
@@ -93,7 +91,7 @@ void setup() {
   printBoth("WiFi Connected: " + WiFi.localIP().toString());
   Blynk.virtualWrite(V4, "http://" + WiFi.localIP().toString() + "/stream");
 
-  // SPIFFS init
+  // SPIFFS
   if (!SPIFFS.begin(true)) {
     printBoth("SPIFFS Mount Failed");
   } else {
@@ -135,8 +133,6 @@ void setup() {
   startCameraServer();
 }
 
-// === MAIN LOOP ===
-
 void loop() {
   Blynk.run();
   server.handleClient();
@@ -144,7 +140,7 @@ void loop() {
   bool motionDetected = digitalRead(PIR_PIN) == HIGH;
   bool reedOpen = digitalRead(REED_SWITCH_PIN) == HIGH;
 
-  // Notify reed open only once
+  // Notify reed-switch open only once
   if (reedOpen && !reedTriggered) {
     reedTriggered = true;
     if (systemArmed) {
@@ -163,7 +159,7 @@ void loop() {
     lastMotion = false;
   }
 
-  // Intrusion = reed open + motion while armed
+  // Intrusion Case
   if (systemArmed && reedOpen && motionDetected) {
     digitalWrite(RED_LED, HIGH);
     digitalWrite(BUZZER_PIN, HIGH);
@@ -179,7 +175,7 @@ void loop() {
   }
 }
 
-// === CAPTURE FUNCTION ===
+// Image capture
 
 void capturePhoto(String label) {
   camera_fb_t * fb = esp_camera_fb_get();
@@ -203,8 +199,6 @@ void capturePhoto(String label) {
   Blynk.virtualWrite(V6, "Fake photo preview [Saved to SPIFFS]");
   esp_camera_fb_return(fb);
 }
-
-// === CAMERA SERVER ===
 
 void startCameraServer() {
   server.on("/", HTTP_GET, []() {
