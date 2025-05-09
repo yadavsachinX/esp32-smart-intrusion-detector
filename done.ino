@@ -9,8 +9,8 @@
 #include "FS.h"
 #include "SPIFFS.h"
 
-char ssid[] = "realme GT 6";
-char pass[] = "11221122";
+char ssid[] = "private";
+char pass[] = "private";
 
 // Pin Definition
 #define PIR_PIN 13
