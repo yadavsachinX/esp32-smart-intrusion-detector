@@ -33,4 +33,4 @@ This project uses the ESP32-CAM to detect intrusions using a PIR sensor and a re
 ![Screenshot 2025-05-09 222956](https://github.com/user-attachments/assets/c2d9539e-e970-4863-8b21-c555b924d584)
 
 ## Video 
-(comming soon)
+(coming soon.........)
